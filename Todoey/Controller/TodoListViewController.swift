@@ -12,7 +12,7 @@ class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
     
-//    let defaults = UserDefaults.standard
+    //    let defaults = UserDefaults.standard
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     override func viewDidLoad() {
@@ -23,9 +23,7 @@ class TodoListViewController: UITableViewController {
         newItem.title = "Find Mike"
         itemArray.append(newItem)
         
-        //        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-        //            itemArray = items
-        //        }
+        loadItems()
         
     }
     
@@ -92,6 +90,17 @@ class TodoListViewController: UITableViewController {
         }
         
         self.tableView.reloadData()
+    }
+    
+    func loadItems() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decaoder = PropertyListDecoder()
+            do {
+                itemArray = try decaoder.decode([Item].self, from: data)
+            } catch {
+                print("Error decoding array: \(error)")
+            }
+        }
     }
 }
 
