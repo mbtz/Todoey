@@ -13,6 +13,7 @@ class TodoListViewController: UITableViewController {
     var itemArray = [Item]()
     
     let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +23,9 @@ class TodoListViewController: UITableViewController {
         newItem.title = "Find Mike"
         itemArray.append(newItem)
         
-        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-            itemArray = items
-        }
+        //        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
+        //            itemArray = items
+        //        }
         
     }
     
@@ -47,7 +48,7 @@ class TodoListViewController: UITableViewController {
         let item = itemArray[indexPath.row]
         
         item.done = !item.done
-
+        
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -65,7 +66,15 @@ class TodoListViewController: UITableViewController {
             newItem.title = textField.text!
             self.itemArray.append(newItem)
             
-            self.defaults.setValue(self.itemArray, forKey: "TodoListArray")
+            let encoder = PropertyListEncoder()
+            
+            do {
+                let data = try encoder.encode(self.itemArray)
+                try data.write(to: self.dataFilePath!)
+            } catch {
+                print("Error ebcoding array: \(error)")
+            }
+            
             self.tableView.reloadData()
         }
         
