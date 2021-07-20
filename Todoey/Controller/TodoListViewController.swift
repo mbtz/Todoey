@@ -21,7 +21,7 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        // loadItems()
+        loadItems()
         
     }
     
@@ -97,6 +97,12 @@ class TodoListViewController: UITableViewController {
         } catch {
             print("Error fetching data: \(error)")
         }
+    }
+    
+    func deleteItem(indexPath: NSIndexPath) {
+        context.delete(itemArray[indexPath.row])
+        itemArray.remove(at: indexPath.row)
+        saveItems()
     }
 }
 
