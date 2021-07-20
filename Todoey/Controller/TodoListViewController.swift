@@ -94,9 +94,9 @@ class TodoListViewController: UITableViewController {
     
     func loadItems() {
         if let data = try? Data(contentsOf: dataFilePath!) {
-            let decaoder = PropertyListDecoder()
+            let decoder = PropertyListDecoder()
             do {
-                itemArray = try decaoder.decode([Item].self, from: data)
+                itemArray = try decoder.decode([Item].self, from: data)
             } catch {
                 print("Error decoding array: \(error)")
             }
