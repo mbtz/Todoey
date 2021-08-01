@@ -25,7 +25,7 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    // MARK: - Tableview Datasource Method
+    // MARK: - Tableview Datasource Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
     }
@@ -39,7 +39,7 @@ class TodoListViewController: UITableViewController {
         return cell
     }
     
-    // MARK: - Tableview Delegate methods
+    // MARK: - Tableview Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = itemArray[indexPath.row]
         
@@ -51,7 +51,7 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    // MARK: - CRUD Functions
+    // MARK: - CRUD Methods
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
