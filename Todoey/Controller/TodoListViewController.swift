@@ -47,13 +47,11 @@ class TodoListViewController: UITableViewController {
         
         saveItems()
         
-        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
         
     }
     
-    // MARK: - Add new Items
-    
+    // MARK: - CRUD Functions
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
@@ -90,19 +88,36 @@ class TodoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    func loadItems() {
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         do {
            itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data: \(error)")
         }
+        
+        tableView.reloadData()
     }
     
     func deleteItem(indexPath: NSIndexPath) {
         context.delete(itemArray[indexPath.row])
         itemArray.remove(at: indexPath.row)
         saveItems()
+    }
+    
+}
+
+// MARK: - UISearchBar Delegate Functions
+extension TodoListViewController: UISearchBarDelegate {
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadItems(with: request)
+        
+        
+        
     }
 }
 
