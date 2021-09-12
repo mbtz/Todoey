@@ -11,7 +11,7 @@ import UIKit
 class TodoListViewController: UITableViewController {
     
     let realm = try! Realm()
-
+    
     var todoItems: Results<Item>?
     var selectedCategory: Category? {
         didSet {
@@ -46,11 +46,17 @@ class TodoListViewController: UITableViewController {
     
     // MARK: - Tableview Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let item = todoItems[indexPath.row]
-//
-//        item.done = !item.done
-//
-//        saveItems()
+        if let item = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    item.done = !item.done
+                }
+                
+            } catch {
+                print("Error updating item: \(error)")
+            }
+        }
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -60,10 +66,10 @@ class TodoListViewController: UITableViewController {
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
-
+        
         let action = UIAlertAction(title: "Add Item", style: .default) { action in
             //what will happen when the user clicks the Add Item button on our UIAlert
-
+            
             if let currentCategory = self.selectedCategory {
                 do {
                     try self.realm.write {
@@ -74,18 +80,18 @@ class TodoListViewController: UITableViewController {
                 } catch {
                     print("Error saving items: \(error)")
                 }
-
+                
                 self.tableView.reloadData()
             }
         }
-
+        
         alert.addTextField { alertTextField in
             alertTextField.placeholder = "Create new item"
             textField = alertTextField
         }
-
+        
         alert.addAction(action)
-
+        
         present(alert, animated: true, completion: nil)
     }
     
@@ -97,42 +103,42 @@ class TodoListViewController: UITableViewController {
         } catch {
             print("Error saving \(item.self): \(error)")
         }
-
+        
         self.tableView.reloadData()
     }
-
+    
     func loadItems() {
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
-
+        
         tableView.reloadData()
     }
-
+    
     func deleteItem(indexPath: NSIndexPath) {
-//        context.delete(itemArray[indexPath.row])
-//        itemArray.remove(at: indexPath.row)
-//        saveItems()
+        //        context.delete(itemArray[indexPath.row])
+        //        itemArray.remove(at: indexPath.row)
+        //        saveItems()
     }
 }
 
 // MARK: - UISearchBar Delegate Functions
 extension TodoListViewController: UISearchBarDelegate {
-//
+    //
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        let request : NSFetchRequest<Item> = Item.fetchRequest()
-//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//        loadItems(with: request, predicate)
+        //        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        //        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        //        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        //
+        //        loadItems(with: request, predicate)
     }
-//
+    //
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchText.count == 0 {
-//            loadItems()
-//
-//            DispatchQueue.main.async {
-//                searchBar.resignFirstResponder()
-//            }
-//        }
+        //        if searchText.count == 0 {
+        //            loadItems()
+        //
+        //            DispatchQueue.main.async {
+        //                searchBar.resignFirstResponder()
+        //            }
+        //        }
     }
 }
 
