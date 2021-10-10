@@ -37,9 +37,11 @@ class TodoListViewController: SwipeTableViewController {
             if let color = UIColor(hexString: hexColor) {
                 let contrastColor = ContrastColorOf(color, returnFlat: true)
                 navBar.backgroundColor = color
+                navBar.barTintColor = color
                 navBar.tintColor = contrastColor
                 navBar.largeTitleTextAttributes = [.foregroundColor: contrastColor]
                 searchBar.barTintColor = color
+                searchBar.searchTextField.leftView?.tintColor = contrastColor
             }
         }
     }
@@ -55,9 +57,11 @@ class TodoListViewController: SwipeTableViewController {
             cell.textLabel?.text = item.title
             cell.accessoryType = item.done ? .checkmark : .none
             
+            
             if let color = UIColor(hexString: selectedCategory!.backgroundColor)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count)) {
                 cell.backgroundColor = color
                 cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+                cell.tintColor = item.done ? ContrastColorOf(color, returnFlat: true) : UIColor.systemBlue
             }
             
         } else {

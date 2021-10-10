@@ -35,6 +35,7 @@ class CategoryViewController: SwipeTableViewController {
             navBar.tintColor = contrastColor
             navBar.largeTitleTextAttributes = [.foregroundColor: contrastColor]
             navBar.backgroundColor = color
+            navBar.barTintColor = color
         }
         
     }
@@ -48,8 +49,10 @@ class CategoryViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let category = categories?[indexPath.row] {
             cell.textLabel?.text = category.name
-            cell.backgroundColor = UIColor(hexString: category.backgroundColor)
-            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+            
+            guard let categoryColor = UIColor(hexString: category.backgroundColor) else {fatalError()}
+            cell.backgroundColor = categoryColor
+            cell.textLabel?.textColor = ContrastColorOf(categoryColor, returnFlat: true)
             
         } else {
             cell.textLabel?.text = "No categories"
@@ -63,6 +66,7 @@ class CategoryViewController: SwipeTableViewController {
     // MARK: - TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
