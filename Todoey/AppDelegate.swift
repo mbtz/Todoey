@@ -20,11 +20,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         var config = Realm.Configuration(
-            schemaVersion: 3,
+            schemaVersion: 4,
             migrationBlock: { migration, oldSchemaVersion in
+                print(oldSchemaVersion)
                 if (oldSchemaVersion < 2) {
                     migration.enumerateObjects(ofType: Item.className()) { oldObject, newObject in
                         newObject!["dateCreated"] = Date()
+                    }
+                }
+                
+                if (oldSchemaVersion < 4) {
+                    migration.enumerateObjects(ofType: Item.className()) { oldObject, newObject in
+                        newObject!["backgroundColor"] = UIColor.randomFlat().hexValue()
+                    }
+                    migration.enumerateObjects(ofType: Category.className()) { oldObject, newObject in
+                        newObject!["backgroundColor"] = UIColor.randomFlat().hexValue()
                     }
                 }
         })

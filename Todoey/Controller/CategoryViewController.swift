@@ -8,18 +8,22 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryViewController: SwipeTableViewController {
     
     var categories: Results<Category>?
     
+    
     let realm = try! Realm()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadCategories()
         
+        tableView.separatorStyle = .none
         tableView.rowHeight = 80
         
     }
@@ -31,9 +35,16 @@ class CategoryViewController: SwipeTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        let category = categories?[indexPath.row]
-        
-        cell.textLabel?.text = category?.name ?? "No categories"
+        if let category = categories?[indexPath.row] {
+            cell.textLabel?.text = category.name
+            cell.backgroundColor = UIColor(hexString: category.backgroundColor)
+            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+            
+        } else {
+            cell.textLabel?.text = "No categories"
+            cell.backgroundColor = UIColor(hexString: "1D9BF6")
+            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+        }
         
         return cell
     }
@@ -48,7 +59,7 @@ class CategoryViewController: SwipeTableViewController {
         
         if let indexPath = tableView.indexPathForSelectedRow {
             let selectedCategory = categories?[indexPath.row]
-                destinationVC.selectedCategory = selectedCategory
+            destinationVC.selectedCategory = selectedCategory
         }
     }
     
@@ -60,6 +71,7 @@ class CategoryViewController: SwipeTableViewController {
         let action = UIAlertAction(title: "Add", style: .default) { action in
             let newCategory = Category()
             newCategory.name = textField.text!
+            newCategory.backgroundColor =  UIColor.randomFlat().hexValue()
             
             self.save(newCategory)
         }
