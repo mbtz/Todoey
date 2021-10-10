@@ -81,6 +81,13 @@
 			path = "Support Files";
 			sourceTree = "<group>";
 		};
+		29BA795226EE5DAA0021C71F /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 		4E81C5AD5BA8E0003F0FC6BC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +126,7 @@
 		EB2BE4F8239524DB00FB933B /* Todoey */ = {
 			isa = PBXGroup;
 			children = (
+				29BA795226EE5DAA0021C71F /* Utility */,
 				297DB4982691CC9600AC429C /* Model */,
 				297DB4992691CCA000AC429C /* View */,
 				297DB49A2691CCA800AC429C /* Controller */,

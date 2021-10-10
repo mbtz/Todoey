@@ -20,15 +20,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let realmConfig = Realm.Configuration(
-            schemaVersion: 1,
-            deleteRealmIfMigrationNeeded: true
-        )
+        var config = Realm.Configuration(
+            schemaVersion: 3,
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 2) {
+                    migration.enumerateObjects(ofType: Item.className()) { oldObject, newObject in
+                        newObject!["dateCreated"] = Date()
+                    }
+                }
+        })
         
-        Realm.Configuration.defaultConfiguration = realmConfig
+        Realm.Configuration.defaultConfiguration = config
+        config = Realm.Configuration()
+        config.deleteRealmIfMigrationNeeded = true
         
         do {
-            let realm = try Realm()
+            let realm = try Realm(configuration: config)
+            print(Realm.Configuration.defaultConfiguration.fileURL)
         } catch {
             print("Error initializing new Realm: \(error)")
         }
