@@ -19,9 +19,6 @@ class TodoListViewController: UITableViewController {
         }
     }
     
-    //    let defaults = UserDefaults.standard
-    //    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         

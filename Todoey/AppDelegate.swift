@@ -33,10 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         config = Realm.Configuration()
         config.deleteRealmIfMigrationNeeded = true
         
-        print(Realm.Configuration.defaultConfiguration.fileURL)
+        //print(Realm.Configuration.defaultConfiguration.fileURL)
         
         do {
-            let realm = try Realm(configuration: config)
+            _ = try Realm(configuration: config)
         } catch {
             print("Error initializing new Realm: \(error)")
         }
